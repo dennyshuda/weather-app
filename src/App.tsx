@@ -1,11 +1,11 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 
 import Axios from "axios";
 import { WeatherCondition } from "./models";
 
 function App() {
   const [weatherData, setWeatherData] = useState<WeatherCondition | null>(null);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("indonesia");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,6 +19,10 @@ function App() {
     import.meta.env.VITE_BASE_URL_KEY
   }&q=${location}`;
 
+  useEffect(() => {
+    getWeather();
+  }, []);
+
   async function getWeather() {
     try {
       setLoading(true);
@@ -30,7 +34,7 @@ function App() {
         icon: response.data.current.condition.icon,
       });
       console.log(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setError(error);
     } finally {
